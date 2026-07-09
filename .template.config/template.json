@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "mpaulosky",
+  "classifications": ["Web", "Blazor", "Aspire", "C#"],
+  "identity": "mpaulosky.ProjectName.Template",
+  "name": "Aspire + Blazor Server Project Template",
+  "shortName": "aspire-blazor",
+  "sourceName": "ProjectName",
+  "preferNameDirectory": true,
+  "tags": {
+    "language": "C#",
+    "type": "solution"
+  },
+  "symbols": {
+    "Framework": {
+      "type": "parameter",
+      "description": "The target framework for the project.",
+      "datatype": "choice",
+      "choices": [
+        { "choice": "net10.0", "description": "Target net10.0" }
+      ],
+      "defaultValue": "net10.0",
+      "replaces": "net10.0"
+    },
+    "Auth0Domain": {
+      "type": "parameter",
+      "datatype": "string",
+      "description": "Your Auth0 tenant domain (e.g. your-tenant.auth0.com)",
+      "defaultValue": "YOUR_AUTH0_DOMAIN",
+      "replaces": "YOUR_AUTH0_DOMAIN"
+    },
+    "Auth0ClientId": {
+      "type": "parameter",
+      "datatype": "string",
+      "description": "Your Auth0 application Client ID",
+      "defaultValue": "YOUR_AUTH0_CLIENT_ID",
+      "replaces": "YOUR_AUTH0_CLIENT_ID"
+    }
+  },
+  "postActions": [
+    {
+      "id": "set-auth0-domain-secret",
+      "description": "Write Auth0:Domain to UI user secrets",
+      "actionId": "3A7C4B45-1F5D-4A30-959A-51B88E82B98E",
+      "continueOnError": true,
+      "manualInstructions": [
+        {
+          "text": "Run: dotnet user-secrets set \"Auth0:Domain\" \"<your-auth0-domain>\" --project src/UI"
+        }
+      ],
+      "args": {
+        "executable": "dotnet",
+        "args": "user-secrets set \"Auth0:Domain\" \"{{Auth0Domain}}\" --project src/UI"
+      }
+    },
+    {
+      "id": "set-auth0-clientid-secret",
+      "description": "Write Auth0:ClientId to UI user secrets",
+      "actionId": "3A7C4B45-1F5D-4A30-959A-51B88E82B98E",
+      "continueOnError": true,
+      "manualInstructions": [
+        {
+          "text": "Run: dotnet user-secrets set \"Auth0:ClientId\" \"<your-auth0-client-id>\" --project src/UI"
+        }
+      ],
+      "args": {
+        "executable": "dotnet",
+        "args": "user-secrets set \"Auth0:ClientId\" \"{{Auth0ClientId}}\" --project src/UI"
+      }
+    }
+  ]
+}
