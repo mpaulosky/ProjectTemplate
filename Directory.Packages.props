@@ -1,28 +1,29 @@
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
     <!-- Aspire -->
-    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.3.0" />
-    <PackageVersion Include="Aspire.Hosting.Testing" Version="9.3.0" />
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.5.2" />
+    <PackageVersion Include="Aspire.Hosting.Testing" Version="9.5.2" />
 
     <!-- Auth0 -->
-    <PackageVersion Include="Auth0.AspNetCore.Authentication" Version="1.4.4" />
+    <PackageVersion Include="Auth0.AspNetCore.Authentication" Version="1.9.0" />
 
     <!-- OpenTelemetry / Service Discovery (Aspire Service Defaults) -->
-    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="9.3.0" />
-    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.11.0" />
-    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.11.0" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.11.0" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.11.0" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.11.0" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.10.0" />
+    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="9.5.2" />
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.16.0" />
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.16.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.16.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.16.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.16.0" />
 
-    <!-- xUnit v3 + Microsoft Testing Platform v2 -->
-    <PackageVersion Include="xunit.v3" Version="1.1.0" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.0" />
-    <PackageVersion Include="Microsoft.Testing.Platform" Version="1.6.3" />
-    <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="1.6.3" />
+    <!-- Test stack -->
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.7.0" />
 
     <!-- Assertions & Mocking -->
     <PackageVersion Include="FluentAssertions" Version="8.3.0" />
@@ -36,5 +37,8 @@
 
     <!-- Playwright (E2E) -->
     <PackageVersion Include="Microsoft.Playwright" Version="1.51.0" />
+
+    <!-- Transitive security pinning -->
+    <PackageVersion Include="MessagePack" Version="3.1.8" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <OutputType>Exe</OutputType>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
@@ -7,9 +8,9 @@
     <ProjectReference Include="../../src/AppHost/AppHost.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
-    <PackageReference Include="Microsoft.Testing.Platform" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="Aspire.Hosting.Testing" />
   </ItemGroup>

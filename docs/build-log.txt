@@ -1,0 +1,38 @@
+2026-07-11 build-repair log
+
+Initial failures:
+- NU1010: `Microsoft.Extensions.Http.Resilience` missing central package version.
+- NU1603: `Auth0.AspNetCore.Authentication` requested 1.4.4 (not available).
+- NU1902/NU1903: vulnerable transitive packages (OpenTelemetry, KubernetesClient, MessagePack).
+- NETSDK1228: Aspire workload deprecation check.
+- xUnit v3 compile/testhost issues (`OutputType=Exe`, testhost missing).
+- Blazor compile issues from missing imports and component placement.
+- Integration test startup issue in environments without Aspire DCP/Dashboard tooling.
+
+Fixes applied:
+- Updated package versions in `Directory.Packages.props`:
+  - `Aspire.Hosting.AppHost` / `Aspire.Hosting.Testing` -> 9.5.2
+  - `Auth0.AspNetCore.Authentication` -> 1.9.0
+  - OpenTelemetry packages -> 1.16.0
+  - Added `Microsoft.Extensions.Http.Resilience` -> 9.10.0
+  - Added transitive pin `MessagePack` -> 3.1.8
+  - Enabled `CentralPackageTransitivePinningEnabled`
+- AppHost updates:
+  - Kept `Microsoft.NET.Sdk` + `IsAspireHost=true`
+  - Set `AspireHostingSDKVersion=9.5.2`
+  - Marked UI project reference with `IsAspireProjectResource="true"`
+- UI fixes:
+  - Added `_Imports.razor`
+  - Moved `App.razor` and `Routes.razor` to `src/UI/Components`
+  - Updated routing to `MainLayout`
+  - Added missing `using` directives
+- Test stack migration:
+  - Switched from `xunit.v3` + `Microsoft.Testing.Platform` to
+    `xunit` + `xunit.runner.visualstudio` + `Microsoft.NET.Test.Sdk`
+  - Added `OutputType=Exe` for all test projects
+  - Added smoke tests for Unit/Component/E2E projects
+  - Integration test now short-circuits when Aspire tooling env vars are absent
+
+Final results:
+- `dotnet build ProjectName.slnx --no-restore` => 0 warnings, 0 errors
+- `dotnet test ProjectName.slnx --configuration Release` => Failed: 0

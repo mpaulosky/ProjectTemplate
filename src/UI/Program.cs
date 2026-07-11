@@ -1,3 +1,6 @@
+using Auth0.AspNetCore.Authentication;
+using UI.Components;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorComponents()
