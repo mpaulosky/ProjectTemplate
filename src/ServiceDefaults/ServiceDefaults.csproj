@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<IsAspireSharedProject>true</IsAspireSharedProject>
+		<NoWarn>$(NoWarn);CA1724</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
