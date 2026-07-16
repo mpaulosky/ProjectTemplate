@@ -3,10 +3,10 @@ namespace ProjectName.Architecture.Tests;
 public class LayerTests
 {
     [Fact]
-    public void Domain_Should_Not_Reference_SystemData()
+    public void DomainShouldNotReferenceSystemData()
     {
         var result = Types
-            .InAssembly(typeof(ProjectName.Domain.AssemblyMarker).Assembly)
+            .InAssembly(typeof(Domain.AssemblyMarker).Assembly)
             .ShouldNot()
             .HaveDependencyOn("System.Data")
             .GetResult();
@@ -16,10 +16,10 @@ public class LayerTests
     }
 
     [Fact]
-    public void Domain_Should_Not_Reference_UI()
+    public void DomainShouldNotReferenceUI()
     {
         var result = Types
-            .InAssembly(typeof(ProjectName.Domain.AssemblyMarker).Assembly)
+            .InAssembly(typeof(Domain.AssemblyMarker).Assembly)
             .ShouldNot()
             .HaveDependencyOn("UI")
             .GetResult();
