@@ -3,7 +3,7 @@ namespace ProjectName.Component.Tests;
 public class SmokeTests
 {
     [Fact]
-    public void Component_Test_Project_Is_Configured()
+    public void ComponentTestProjectIsConfigured()
     {
         Assert.True(true);
     }
