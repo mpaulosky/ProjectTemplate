@@ -9,4 +9,7 @@
 	<ItemGroup>
 		<PackageReference Include="Auth0.AspNetCore.Authentication" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Features\" />
+	</ItemGroup>
 </Project>
