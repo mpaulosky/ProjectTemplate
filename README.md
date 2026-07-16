@@ -77,10 +77,16 @@ cd MyApp
 Copy your Auth0 application credentials into user secrets (never commit these):
 
 ```bash
-dotnet user-secrets set "Auth0:Domain" "your-tenant.auth0.com" --project src/UI
-dotnet user-secrets set "Auth0:ClientId" "YOUR_CLIENT_ID" --project src/UI
-dotnet user-secrets set "Auth0:ClientSecret" "YOUR_CLIENT_SECRET" --project src/UI
+dotnet user-secrets set "Auth0:Domain": "dev-63xbriztum2j1765.us.auth0.com",
+dotnet user-secrets set "Auth0:ClientId": "RseZSdbhkpYi3X7CjxvffTmWZrxtZ8lS",
+dotnet user-secrets set "Auth0:ClientSecret": "qqPHXgNld9C8fgLO98qZvL6pzwcRBRyS_zwdj8bAd-gyxecRkYtVr0ZOtF0_z9aI",
+dotnet user-secrets set "Auth0:Audience": "https://dev-63xbriztum2j1765.us.auth0.com/api/v2/",
+dotnet user-secrets set "Auth0:Auth0Management:Domain": "dev-63xbriztum2j1765.us.auth0.com",
+dotnet user-secrets set "Auth0:Auth0Management:ClientId": "h4MajcjwAWcFnHUEsashdzntbN74dVxn",
+dotnet user-secrets set "Auth0:Auth0Management:ClientSecret": "clsilv1-yjelYdi5ulpwdzTlEEQoei6_VpOfYdC0mQIJ5RPUxhVCgCqJay34tmkM",
+dotnet user-secrets set "Auth0:Auth0Management:Audience": "https://dev-63xbriztum2j1765.us.auth0.com/api/v2/"
 ```
+
 
 See [docs/AUTH0_SETUP.md](docs/AUTH0_SETUP.md) for full Auth0 application configuration steps.
 

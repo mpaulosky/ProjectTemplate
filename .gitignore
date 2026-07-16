@@ -407,6 +407,7 @@ test-results.txt
 
 # Linux folder icon
 .directory
+
 # Squad: ignore runtime state (logs, inbox, sessions)
 # Note: .squad/casting/* is identity and MUST be committed to main, not ignored
 .squad/.scratch/
