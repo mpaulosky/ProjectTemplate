@@ -2,7 +2,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <IsAspireHost>true</IsAspireHost>
-    <AspireHostingSDKVersion>9.5.2</AspireHostingSDKVersion>
+    <AspireHostingSDKVersion>13.4.6</AspireHostingSDKVersion>
+    <AspireUseCliBundle>true</AspireUseCliBundle>
     <UserSecretsId>3d4e5f6a-7b8c-9d0e-1f2a-3b4c5d6e7f8a</UserSecretsId>
     <NoWarn>$(NoWarn);CA1515</NoWarn>
   </PropertyGroup>
