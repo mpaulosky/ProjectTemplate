@@ -1,3 +1,5 @@
+[assembly: CLSCompliant(true)]
+
 namespace ProjectName.Domain;
 
 /// <summary>
