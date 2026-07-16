@@ -36,3 +36,42 @@ Fixes applied:
 Final results:
 - `dotnet build ProjectName.slnx --no-restore` => 0 warnings, 0 errors
 - `dotnet test ProjectName.slnx --configuration Release` => Failed: 0
+
+2026-07-16 build-repair log
+
+Contract notes:
+- Followed the `build-repair` skill quick reference because `.github/prompts/build-repair.prompt.md` is missing in this repo.
+- Actual repo entrypoint is `ProjectName.slnx`.
+- .NET SDK in this environment is `10.0.301`, which changes `dotnet test` behavior for Microsoft Testing Platform.
+
+Commands run:
+- `dotnet restore tests/Unit.Tests/Unit.Tests.csproj && dotnet build tests/Unit.Tests/Unit.Tests.csproj --no-restore`
+- `dotnet list tests/Unit.Tests/Unit.Tests.csproj package --include-transitive`
+- `dotnet test tests/Unit.Tests/Unit.Tests.csproj --no-restore -v minimal`
+- `dotnet test -h`
+- Focused validation during repair:
+  - `dotnet restore tests/Unit.Tests/Unit.Tests.csproj && dotnet build tests/Unit.Tests/Unit.Tests.csproj --no-restore`
+- Final validation:
+  - `dotnet restore ProjectName.slnx`
+  - `dotnet build ProjectName.slnx --no-restore -c Release -v minimal`
+  - `dotnet test ProjectName.slnx -v minimal`
+
+Failures fixed:
+- Test projects were in an unstable mixed state: shared build targets enabled Microsoft Testing Platform, but the projects still referenced the VSTest/xUnit v2 stack.
+- A naive xUnit v3 migration was also unstable in this SDK because `xunit.v3` transitively installs `xunit.v3.mtp-v1`, which collides with a direct `xunit.v3.mtp-v2` reference.
+- On .NET SDK `10.0.301`, `dotnet test` hard-fails for MTP projects unless the repo opts into the new Microsoft Testing Platform-based command in `global.json`.
+
+Fixes applied:
+- Kept the user-required xUnit v3 stack and normalized every test project to the aggregate `xunit.v3.mtp-v2` package.
+- Removed the conflicting VSTest-era references from all test projects:
+  - `xunit`
+  - `xunit.runner.visualstudio`
+  - `Microsoft.NET.Test.Sdk`
+- Avoided the invalid `xunit.v3` + `xunit.v3.mtp-v2` combination, since the former already carries the v1 MTP bridge in this package version.
+- Added the repo-level .NET 10 test runner opt-in to `global.json`:
+  - `"test": { "runner": "Microsoft.Testing.Platform" }`
+
+Final status:
+- `dotnet restore ProjectName.slnx` => clean
+- `dotnet build ProjectName.slnx --no-restore -c Release -v minimal` => 0 warnings, 0 errors
+- `dotnet test ProjectName.slnx -v minimal` => Passed, failed: 0, succeeded: 6

@@ -48,8 +48,14 @@ dotnet new aspire-blazor -n MyApp --Auth0Domain "your-tenant.auth0.com" --Auth0C
 After the project is created, **postActions** automatically run:
 
 ```bash
-dotnet user-secrets set "Auth0:Domain" "your-tenant.auth0.com" --project src/UI
-dotnet user-secrets set "Auth0:ClientId" "your-client-id" --project src/UI
+dotnet user-secrets set "Auth0:Domain": "dev-63xbriztum2j1765.us.auth0.com",
+dotnet user-secrets set "Auth0:ClientId": "RseZSdbhkpYi3X7CjxvffTmWZrxtZ8lS",
+dotnet user-secrets set "Auth0:ClientSecret": "qqPHXgNld9C8fgLO98qZvL6pzwcRBRyS_zwdj8bAd-gyxecRkYtVr0ZOtF0_z9aI",
+dotnet user-secrets set "Auth0:Audience": "https://dev-63xbriztum2j1765.us.auth0.com/api/v2/",
+dotnet user-secrets set "Auth0:Auth0Management:Domain": "dev-63xbriztum2j1765.us.auth0.com",
+dotnet user-secrets set "Auth0:Auth0Management:ClientId": "h4MajcjwAWcFnHUEsashdzntbN74dVxn",
+dotnet user-secrets set "Auth0:Auth0Management:ClientSecret": "clsilv1-yjelYdi5ulpwdzTlEEQoei6_VpOfYdC0mQIJ5RPUxhVCgCqJay34tmkM",
+dotnet user-secrets set "Auth0:Auth0Management:Audience": "https://dev-63xbriztum2j1765.us.auth0.com/api/v2/"
 ```
 
 The values are stored in the .NET user secrets store — never committed to source control.
@@ -59,8 +65,14 @@ The values are stored in the .NET user secrets store — never committed to sour
 If the postActions did not run (some environments skip them), run these commands from the project root:
 
 ```bash
-dotnet user-secrets set "Auth0:Domain" "your-tenant.auth0.com" --project src/UI
-dotnet user-secrets set "Auth0:ClientId" "your-client-id" --project src/UI
+dotnet user-secrets set "Auth0:Domain": "dev-63xbriztum2j1765.us.auth0.com",
+dotnet user-secrets set "Auth0:ClientId": "RseZSdbhkpYi3X7CjxvffTmWZrxtZ8lS",
+dotnet user-secrets set "Auth0:ClientSecret": "qqPHXgNld9C8fgLO98qZvL6pzwcRBRyS_zwdj8bAd-gyxecRkYtVr0ZOtF0_z9aI",
+dotnet user-secrets set "Auth0:Audience": "https://dev-63xbriztum2j1765.us.auth0.com/api/v2/",
+dotnet user-secrets set "Auth0:Auth0Management:Domain": "dev-63xbriztum2j1765.us.auth0.com",
+dotnet user-secrets set "Auth0:Auth0Management:ClientId": "h4MajcjwAWcFnHUEsashdzntbN74dVxn",
+dotnet user-secrets set "Auth0:Auth0Management:ClientSecret": "clsilv1-yjelYdi5ulpwdzTlEEQoei6_VpOfYdC0mQIJ5RPUxhVCgCqJay34tmkM",
+dotnet user-secrets set "Auth0:Auth0Management:Audience": "https://dev-63xbriztum2j1765.us.auth0.com/api/v2/"
 ```
 
 ## The appsettings.json Placeholders Are Safe to Commit
