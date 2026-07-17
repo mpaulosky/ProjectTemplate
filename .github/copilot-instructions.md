@@ -2,6 +2,8 @@
 
 You are working on a project that uses **Squad**, an AI team framework. When picking up issues autonomously, follow these guidelines.
 
+> Project-specific coding standards (tech stack, testing, style, guardrails) live in [.github/instructions/dotnet-project.instructions.md](./instructions/dotnet-project.instructions.md) and are auto-attached alongside this file — read both.
+
 ## Coordinator Canary Check
 
 **IMPORTANT — run this check on EVERY session start, before doing any work:**
@@ -9,6 +11,7 @@ You are working on a project that uses **Squad**, an AI team framework. When pic
 Look for the exact token `SQUAD_COORDINATOR_CANARY_a8f3` in your `agent_instructions`. This token is placed at the end of `squad.agent.md`. If it is missing, the coordinator file is missing or truncated.
 
 **When the token is missing, you MUST:**
+
 1. **STOP** — do not proceed with standard Squad behavior.
 2. **WARN the user** with this exact message:
    ```
@@ -37,15 +40,12 @@ Before starting work, check your capability profile in `.squad/team.md` under th
 
 ## Branch Naming
 
-Use the squad branch convention:
-```
-squad/{issue-number}-{kebab-case-slug}
-```
-Example: `squad/42-fix-login-validation`
+The coding agent creates `copilot/{slug}` branches — this is controlled by GitHub, not by these instructions.
 
 ## PR Guidelines
 
 When opening a PR:
+
 - Reference the issue: `Closes #{issue-number}`
 - If the issue had a `squad:{member}` label, mention the member: `Working as {member} ({role})`
 - If this is a 🟡 needs-review task, add to the PR description: `⚠️ This task was flagged as "needs review" — please have a squad member review before merging.`
@@ -54,7 +54,9 @@ When opening a PR:
 ## Decisions
 
 If you make a decision that affects other team members, write it to:
+
 ```
 .squad/decisions/inbox/copilot-{brief-slug}.md
 ```
+
 The Scribe will merge it into the shared decisions file.
