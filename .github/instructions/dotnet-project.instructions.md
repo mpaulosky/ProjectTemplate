@@ -22,7 +22,7 @@ applyTo: "**"
 ## Style
 
 - **Use .editorconfig:** `true`
-- **Use Bootstrap:** `true`
+- **Use Tailwind CSS:** `true` (v4, CSS-first config — see `src/UI/Styles/app.tailwind.css`)
 
 ## Testing
 

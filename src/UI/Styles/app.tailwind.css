@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+/*
+	Custom theme tokens (Tailwind v4 CSS-first config).
+	"primary" aliases the app's brand blue so components can use
+	bg-primary-*, text-primary-*, border-primary-* utilities.
+*/
+@theme {
+	--color-primary-50: #f0f9ff;
+	--color-primary-100: #e0f2fe;
+	--color-primary-200: #bae6fd;
+	--color-primary-300: #7dd3fc;
+	--color-primary-400: #38bdf8;
+	--color-primary-500: #0ea5e9;
+	--color-primary-600: #0284c7;
+	--color-primary-700: #0369a1;
+	--color-primary-800: #075985;
+	--color-primary-900: #0c4a6e;
+	--color-primary-950: #082f49;
+}
+
+/*
+	The rules below are Blazor framework hooks, not decorative Bootstrap
+	mimicry — Blazor's built-in error UI and form-validation JS/CSS
+	conventions depend on these exact selectors existing. Do not delete.
+*/
+
+.content {
+	padding-top: 1.1rem;
+}
+
+.valid.modified:not([type=checkbox]) {
+	outline: 1px solid #26b050;
+}
+
+.invalid {
+	outline: 1px solid #e50000;
+}
+
+.validation-message {
+	color: #e50000;
+}
+
+#blazor-error-ui {
+	background: lightyellow;
+	bottom: 0;
+	box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+	display: none;
+	left: 0;
+	padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+	position: fixed;
+	width: 100%;
+	z-index: 1000;
+}
+
+	#blazor-error-ui .dismiss {
+		cursor: pointer;
+		position: absolute;
+		right: 0.75rem;
+		top: 0.5rem;
+	}

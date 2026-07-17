@@ -5,6 +5,7 @@
 Created all project files for the `dotnet new aspire-blazor` template. Placeholder `ProjectName` is the `sourceName` in `template.json` — dotnet new replaces it everywhere on instantiation.
 
 **Files created (37 total):**
+
 - Root: `ProjectName.slnx`, `Directory.Build.props`, `Directory.Packages.props`, `.template.config/template.json`
 - `src/ProjectName.AppHost/` — Aspire host with UI project reference
 - `src/ProjectName.Domain/` — clean domain library with `AssemblyMarker` and README
@@ -16,6 +17,7 @@ Created all project files for the `dotnet new aspire-blazor` template. Placehold
 - `tests/ProjectName.E2E.Tests/` — Playwright + Aspire.Hosting.Testing setup
 
 **Key decisions:**
+
 - Central package management via `Directory.Packages.props` (no Version attrs in .csproj files)
 - xUnit v3 (1.1.0) + Microsoft.Testing.Platform (1.6.3) across all test projects
 - Auth0 via `Auth0.AspNetCore.Authentication` 1.4.4 in UI; secrets left as placeholders
@@ -25,6 +27,7 @@ Created all project files for the `dotnet new aspire-blazor` template. Placehold
 ## 2026-07-09 — Removed `ProjectName.` prefix from all project directories and .csproj files
 
 Renamed all 8 project directories and their .csproj files, dropping the `ProjectName.` prefix:
+
 - `src/ProjectName.AppHost/` → `src/AppHost/` (AppHost.csproj)
 - `src/ProjectName.Domain/` → `src/Domain/` (Domain.csproj)
 - `src/ProjectName.UI/` → `src/UI/` (UI.csproj)
@@ -37,8 +40,6 @@ Renamed all 8 project directories and their .csproj files, dropping the `Project
 Updated `ProjectName.slnx`, all `<ProjectReference>` paths in .csproj files, Aspire generated type names (`Projects.UI`, `Projects.AppHost`), the Blazor stylesheet href, and descriptive strings in README/CSS. Standalone `ProjectName` substitution token in namespaces/type refs intentionally left untouched.
 
 **Requested by:** mpaulosky
-
-
 
 Joined the ProjectTemplate crew as Lead / Architect.
 
@@ -53,6 +54,7 @@ Created 37 files: ProjectName.slnx at root, Directory.Build.props, Directory.Pac
 ## 2026-07-09 — Rewrote README.md and updated all docs/ to use ProjectName token
 
 Replaced `MyBlog`-specific README with a proper template README using `ProjectName` as the dotnet new substitution token throughout. Updated five files:
+
 - `README.md` — full rewrite (140 lines): ProjectName token, correct tech stack, accurate project structure, Getting Started with Auth0 setup, 5-tier testing table
 - `docs/CONTRIBUTING.md` — replaced old folder tree (Api/Shared/Web) with correct template layout (AppHost/Domain/UI + 5 test projects)
 - `docs/REFERENCES.md` — full rewrite: removed AINotesApp/EF Core/SQL Server/MediatR refs; added Aspire, Auth0, xUnit v3, BUnit, NetArchTest, Playwright, CPM references
@@ -68,3 +70,14 @@ Full rewrite of README.md using `ProjectName` token and `your-github-username` p
 ## 2026-07-09 — Added Auth0 template symbols and postActions
 
 Added Auth0Domain and Auth0ClientId parameter symbols to template.json with replaces targeting the appsettings.json placeholders. Added two postActions to run dotnet user-secrets set after template instantiation. Created docs/AUTH0_SETUP.md. Requested by mpaulosky.
+
+## 2026-07-17 — 📌 Team update: Pre-existing build breakage flagged by Kaylee
+
+Kaylee (Frontend Dev) found unrelated build breakage while working on the Tailwind CSS v4 migration, confirmed via `git stash` to predate her changes:
+
+- `src/UI/Components/Routes.razor` — missing `AuthorizeRouteView`/`NotAuthorized` usings
+- `src/UI/Components/Layout/FooterComponent.razor` — `BuildInfo` type not resolving
+
+Not fixed (out of scope for the CSS task). Flagging for Mal's attention since these look scaffold/template-related.
+
+**Reported by:** Scribe (via Copilot), on behalf of Kaylee
