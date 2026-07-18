@@ -1,8 +1,8 @@
 <footer class="border-t-2 border-primary-800 bg-primary-400 dark:bg-primary-400 py-4" role="contentinfo">
 	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
 
-		<span class="font-semibold text-primary-900 dark:text-primary-50">&copy; @DateTime.Now.Year IssueTracker &mdash;
-			Built with .NET 10 &amp; Blazor</span>
+		<span class="font-semibold text-primary-900 dark:text-primary-50">&copy; @DateTime.Now.Year @_siteName &mdash;
+			Built with .NET 10 &amp; Aspire &amp; BlazorServer</span>
 
 			<div class="flex items-center gap-4 font-mono">
 				<a href="@_releaseUrl" target="_blank" rel="noopener noreferrer" class="text-base"
@@ -18,10 +18,13 @@
 		</div>
 	</footer>
 @code {
-	private const string RepoBase = "https://github.com/mpaulosky/IssueTrackerApp";
 
-	private string _releaseUrl = $"{RepoBase}/releases";
-	private string _commitUrl = $"{RepoBase}/commits";
+	private const string _siteName = "ProjectName";
+
+	private const string _repoBase = $"https://github.com/mpaulosky/{_siteName}";
+
+	private string _releaseUrl = $"{_repoBase}/releases";
+	private string _commitUrl = $"{_repoBase}/commits";
 
 	/// <summary>
 	/// Resolves GitHub URLs from the build-time <see cref="BuildInfo"/> constants.
@@ -29,12 +32,12 @@
 	protected override void OnInitialized()
 	{
 		_releaseUrl = IsKnown(BuildInfo.Version)
-			? $"{RepoBase}/releases/tag/{BuildInfo.Version}"
-			: $"{RepoBase}/releases";
+			? $"{_repoBase}/releases/tag/{BuildInfo.Version}"
+			: $"{_repoBase}/releases";
 
 		_commitUrl = IsKnown(BuildInfo.Commit)
-			? $"{RepoBase}/commit/{BuildInfo.Commit}"
-			: $"{RepoBase}/commits";
+			? $"{_repoBase}/commit/{BuildInfo.Commit}"
+			: $"{_repoBase}/commits";
 	}
 
 	private static bool IsKnown(string value) =>
