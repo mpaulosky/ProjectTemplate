@@ -1,10 +1,15 @@
-namespace ProjectName.Component.Tests;
+namespace UI;
 
 public class SmokeTests
 {
-    [Fact]
-    public void ComponentTestProjectIsConfigured()
-    {
-        Assert.True(true);
-    }
+	[Fact]
+	public void UnitTestProjectIsConfigured()
+	{
+		// Arrange
+		bool value = true;
+		// Act
+
+		// Assert
+		value.Should().BeTrue();
+	}
 }

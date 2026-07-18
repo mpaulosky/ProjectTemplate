@@ -7,9 +7,9 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Architecture.Tests/Architecture.Tests.csproj" />
-    <Project Path="tests/Integration.Tests/Integration.Tests.csproj" />
     <Project Path="tests/Unit.Tests/Unit.Tests.csproj" />
     <Project Path="tests/Component.Tests/Component.Tests.csproj" />
+    <Project Path="tests/Domain.Tests/Domain.Tests.csproj" />
     <Project Path="tests/E2E.Tests/E2E.Tests.csproj" />
   </Folder>
 </Solution>

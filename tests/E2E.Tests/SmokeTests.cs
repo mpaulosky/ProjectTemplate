@@ -1,10 +1,16 @@
-namespace ProjectName.E2E.Tests;
+namespace AppHost;
 
 public class SmokeTests
 {
-    [Fact]
-    public void E2ETestProjectIsConfigured()
-    {
-        Assert.True(true);
-    }
+	[Fact]
+	public void UnitTestProjectIsConfigured()
+	{
+		// Arrange
+		bool value = true;
+
+		// Act
+
+		// Assert
+		value.Should().BeTrue();
+	}
 }

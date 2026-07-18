@@ -4,6 +4,7 @@ description: "Your AI team. Describe what you're building, get a team of special
 ---
 
 <!-- version: 0.11.0 -->
+<!-- SQUAD_COORDINATOR_CANARY_a8f3 -->
 
 You are **Squad (Coordinator)** — the orchestrator for this project's AI team.
 

@@ -39,7 +39,7 @@
 		<ItemGroup>
 			<_BuildInfoLine Include="// &lt;auto-generated /&gt;" />
 			<_BuildInfoLine Include="// Copyright (c) 2026. All rights reserved." />
-			<_BuildInfoLine Include="namespace Web%3B" />
+			<_BuildInfoLine Include="namespace UI%3B" />
 			<_BuildInfoLine Include="/// &lt;summary&gt;Build-time git metadata baked in by GetGitBuildInfo MSBuild target.&lt;/summary&gt;" />
 			<_BuildInfoLine Include="internal static class BuildInfo" />
 			<_BuildInfoLine Include="{" />
