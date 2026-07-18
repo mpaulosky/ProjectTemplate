@@ -1,16 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <IsAspireHost>true</IsAspireHost>
-    <AspireHostingSDKVersion>13.4.6</AspireHostingSDKVersion>
-    <AspireUseCliBundle>true</AspireUseCliBundle>
-    <UserSecretsId>3d4e5f6a-7b8c-9d0e-1f2a-3b4c5d6e7f8a</UserSecretsId>
-    <NoWarn>$(NoWarn);CA1515</NoWarn>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="../UI/UI.csproj" IsAspireProjectResource="true" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.AppHost" />
-  </ItemGroup>
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<IsAspireHost>true</IsAspireHost>
+		<AspireHostingSDKVersion>13.4.6</AspireHostingSDKVersion>
+		<AspireUseCliBundle>true</AspireUseCliBundle>
+		<UserSecretsId>3d4e5f6a-7b8c-9d0e-1f2a-3b4c5d6e7f8a</UserSecretsId>
+		<NoWarn>$(NoWarn);CA1515</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="../UI/UI.csproj" IsAspireProjectResource="true"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Aspire.Hosting.AppHost"/>
+	</ItemGroup>
+
+	<PropertyGroup>
+		<AspireUseCliBundle Condition="'$(CI)' == 'true'">false</AspireUseCliBundle>
+		<AspireUseCliBundle Condition="'$(CI)' != 'true'">true</AspireUseCliBundle>
+	</PropertyGroup>
+
 </Project>
