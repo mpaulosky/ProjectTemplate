@@ -3,7 +3,6 @@
 	<PropertyGroup>
 		<IsPackable>false</IsPackable>
 		<IsTestProject>true</IsTestProject>
-		<NoWarn>$(NoWarn);CA2007</NoWarn>
 		<RootNamespace>Domain</RootNamespace>
 	</PropertyGroup>
 
@@ -13,7 +12,7 @@
 		<PackageReference Include="FluentValidation"/>
 		<PackageReference Include="Microsoft.NET.Test.Sdk"/>
 		<PackageReference Include="NSubstitute"/>
-		<PackageReference Include="xunit.v3.mtp-v2"/>
+		<PackageReference Include="xunit.v3"/>
 		<PackageReference Include="xunit.runner.visualstudio"/>
 	</ItemGroup>
 

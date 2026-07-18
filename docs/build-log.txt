@@ -75,3 +75,40 @@ Final status:
 - `dotnet restore ProjectName.slnx` => clean
 - `dotnet build ProjectName.slnx --no-restore -c Release -v minimal` => 0 warnings, 0 errors
 - `dotnet test ProjectName.slnx -v minimal` => Passed, failed: 0, succeeded: 6
+
+2026-07-18 build-repair log
+
+Contract notes:
+- Followed the `build-repair` skill quick-reference flow because `.github/prompts/build-repair.prompt.md` is missing in this repo.
+- Used `ProjectName.slnx` as the solution entrypoint.
+
+Commands run:
+- `dotnet restore ProjectName.slnx`
+- `dotnet build ProjectName.slnx --no-restore -c Release -v minimal`
+- `dotnet test ProjectName.slnx --configuration Release -v minimal`
+
+Failures encountered:
+- Build initially reported 6 warnings:
+  - `CA1014` on test assemblies (`Domain.Tests`, `Unit.Tests`, `Architecture.Tests`, `Component.Tests`, `E2E.Tests`).
+  - `CA1515` on `AppHostMarker` visibility.
+- Test run initially exited non-success (`exit code 8`) because `Domain.Tests` had zero tests.
+- First fix pass introduced:
+  - `CS1061` in `Domain.Tests/SmokeTests.cs` due to missing `FluentAssertions` using.
+  - `CA1812` on `AppHostMarker` after visibility change.
+
+Fixes applied:
+- Added assembly compliance attributes to test projects:
+  - `[assembly: System.CLSCompliant(false)]` in each of:
+    - `tests/Domain.Tests/AssemblyInfo.cs`
+    - `tests/Unit.Tests/AssemblyInfo.cs`
+    - `tests/Architecture.Tests/AssemblyInfo.cs`
+    - `tests/Component.Tests/AssemblyInfo.cs`
+    - `tests/E2E.Tests/AssemblyInfo.cs`
+- Added `tests/Domain.Tests/SmokeTests.cs` to ensure at least one executable test.
+- Added `using FluentAssertions;` to the new domain smoke test.
+- Changed `src/AppHost/AppHostMarker.cs` to an internal static marker type to satisfy analyzers.
+
+Final status:
+- `dotnet restore ProjectName.slnx` => clean
+- `dotnet build ProjectName.slnx --no-restore -c Release -v minimal` => 0 warnings, 0 errors
+- `dotnet test ProjectName.slnx --configuration Release -v minimal` => Passed, failed: 0, succeeded: 6

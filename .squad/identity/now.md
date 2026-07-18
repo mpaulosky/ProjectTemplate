@@ -1,9 +1,9 @@
 ---
-updated_at: 2026-07-09T15:11:57.351Z
-focus_area: Initial setup
+updated_at: 2026-07-18T15:05:07-0700
+focus_area: Build repair and validation
 active_issues: []
 ---
 
 # What We're Focused On
 
-Getting started. Updated by coordinator at session start.
+Running build repair workflow (restore/build/test + log update).

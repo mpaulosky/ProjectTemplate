@@ -1,3 +1,5 @@
 namespace AppHost;
 
-public sealed class AppHostMarker;
+internal static class AppHostMarker
+{
+}
