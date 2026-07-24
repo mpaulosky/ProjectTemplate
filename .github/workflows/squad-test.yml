@@ -100,221 +100,73 @@ jobs:
             ${{ runner.os }}-build-
 
 
-  test-domain:
-    name: "Domain Tests"
+  discover-tests:
+    name: Discover Test Projects
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: build
+    needs:
+      - build
+    outputs:
+      matrix: ${{ steps.discover.outputs.matrix }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v5
-        with:
-          global-json-file: global.json
-
-      - name: Cache NuGet packages
-        uses: actions/cache@v6
-        with:
-          path: ${{ github.workspace }}/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/Directory.Packages.props') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Run Domain Tests
+      - name: Discover test projects
+        id: discover
         run: |
-          dotnet test tests/Domain.Tests \
-            --configuration Release \
-            --collect:"XPlat Code Coverage" \
-            --logger "trx;LogFileName=domain.trx" \
-            --results-directory test-results \
-            --verbosity minimal
+          matrix_json=$(python - <<'PY'
+          import json
+          from pathlib import Path
 
-      - name: Upload Domain Test Results
-        uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: domain-test-results
-          path: test-results
+          projects = []
+          for csproj in sorted(Path("tests").glob("**/*.csproj")):
+              folder = csproj.parent.name
+              lowered = folder.lower()
+              test_id = lowered.replace(".", "-").replace("_", "-")
+              is_e2e = "e2e" in lowered
+              projects.append(
+                  {
+                      "project_path": csproj.as_posix(),
+                      "test_name": folder,
+                      "test_id": test_id,
+                      "build_before_test": is_e2e,
+                      "no_build": is_e2e,
+                      "requires_playwright": is_e2e,
+                      "verbosity": "normal" if is_e2e else "minimal",
+                  }
+              )
 
-  test-unit:
-    name: "Unit Tests"
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: build
+          if not projects:
+              raise SystemExit("No test projects found under tests/.")
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
+          print(json.dumps({"include": projects}))
+          PY
+          )
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v5
-        with:
-          global-json-file: global.json
+          {
+            echo "matrix<<EOF"
+            echo "$matrix_json"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
-      - name: Cache NuGet packages
-        uses: actions/cache@v6
-        with:
-          path: ${{ github.workspace }}/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/Directory.Packages.props') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
+          project_count=$(echo "$matrix_json" | jq '.include | length')
+          echo "::notice::Discovered ${project_count} test projects under tests/"
 
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Run Unit Tests
-        run: |
-          dotnet test tests/Unit.Tests \
-            --configuration Release \
-            --collect:"XPlat Code Coverage" \
-            --logger "trx;LogFileName=Unit.trx" \
-            --results-directory test-results \
-            --verbosity minimal
-
-      - name: Upload Unit Test Results
-        uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: Unit-test-results
-          path: test-results
-
-  test-architecture:
-    name: "Architecture Tests"
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: build
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v5
-        with:
-          global-json-file: global.json
-
-      - name: Cache NuGet packages
-        uses: actions/cache@v6
-        with:
-          path: ${{ github.workspace }}/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/Directory.Packages.props') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Build Architecture Tests
-        run: dotnet build tests/Architecture.Tests --configuration Release --no-restore
-
-      - name: Run Architecture Tests
-        id: arch-tests
-        run: |
-          mkdir -p test-results
-          if [ ! -d "tests/Architecture.Tests" ]; then
-            echo "::notice::Architecture test project not found at tests/Architecture.Tests - skipping"
-            exit 0
-          fi
-
-          # Run tests using dotnet test
-          dotnet test tests/Architecture.Tests \
-            --configuration Release \
-            --no-build \
-            --logger "trx;LogFileName=architecture.trx" \
-            --results-directory "$GITHUB_WORKSPACE/test-results" \
-            --collect:"XPlat Code Coverage" \
-            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
-          exit_code=$?
-
-          if [ $exit_code -ne 0 ]; then
-            echo "::error::Architecture tests failed"
-          fi
-          exit $exit_code
-
-      - name: Upload Architecture Test Results
-        uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: architecture-test-results
-          path: test-results
-
-  test-component:
-    name: "Component Tests"
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    needs: build
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v5
-        with:
-          global-json-file: global.json
-
-      - name: Cache NuGet packages
-        uses: actions/cache@v6
-        with:
-          path: ${{ github.workspace }}/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/Directory.Packages.props') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Build Component Tests
-        run: dotnet build tests/Component.Tests --configuration Release --no-restore
-
-      - name: Run Component Tests
-        id: component-tests
-        run: |
-          mkdir -p test-results
-          if [ ! -d "tests/Component.Tests" ]; then
-            echo "::notice::Component/Component test project not found at tests/Component.Tests - skipping"
-            exit 0
-          fi
-
-          # Run tests using dotnet test
-          dotnet test tests/Component.Tests \
-            --configuration Release \
-            --no-build \
-            --logger "trx;LogFileName=component.trx" \
-            --results-directory "$GITHUB_WORKSPACE/test-results" \
-            --collect:"XPlat Code Coverage" \
-            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
-          exit_code=$?
-
-          if [ $exit_code -ne 0 ]; then
-            echo "::error::Component tests failed"
-          fi
-          exit $exit_code
-
-      - name: Upload Component Test Results
-        uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: component-test-results
-          path: test-results
-
-  test-e2e:
-    name: "E2E Tests (Aspire + Playwright E2E)"
+  test:
+    name: "Tests: ${{ matrix.test_name }}"
     runs-on: ubuntu-latest
     timeout-minutes: 45
-    needs: build
+    needs:
+      - build
+      - discover-tests
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.discover-tests.outputs.matrix) }}
 
     env:
       ASPIRE_ALLOW_UNSECURED_TRANSPORT: "true"
-      # Required by E2E builder.AddConnectionString("mongodb") even though
-      # the Unit app ignores it in Testing mode (no real DB connection is made).
-      # ConnectionStrings__mongodb: "mongodb://localhost:27017"
 
     steps:
       - name: Checkout code
@@ -336,35 +188,44 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build E2E Tests
-        run: dotnet build tests/E2E.Tests --configuration Release --no-restore
+      - name: Build test project
+        if: ${{ matrix.build_before_test }}
+        run: dotnet build "${{ matrix.project_path }}" --configuration Release --no-restore
 
       - name: Install Playwright browsers
+        if: ${{ matrix.requires_playwright }}
         run: |
           pwsh tests/E2E.Tests/bin/Release/net10.0/playwright.ps1 install chromium --with-deps
 
-      - name: Run E2E Tests
-        id: e2e-tests
+      - name: Run tests
+        id: run-tests
         run: |
           mkdir -p test-results
-          dotnet test tests/E2E.Tests \
+
+          no_build_arg=""
+          if [ "${{ matrix.no_build }}" = "true" ]; then
+            no_build_arg="--no-build"
+          fi
+
+          dotnet test "${{ matrix.project_path }}" \
             --configuration Release \
-            --no-build \
-            --verbosity normal \
-            --logger "trx;LogFileName=e2e.trx" \
+            $no_build_arg \
+            --verbosity "${{ matrix.verbosity }}" \
+            --logger "trx;LogFileName=${{ matrix.test_id }}.trx" \
             --results-directory "$GITHUB_WORKSPACE/test-results" \
-            --collect:"XPlat Code Coverage"
+            --collect:"XPlat Code Coverage" \
+            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
           exit_code=$?
           if [ $exit_code -ne 0 ]; then
-            echo "::error::E2E Tests failed"
+            echo "::error::Test project failed: ${{ matrix.project_path }}"
           fi
           exit $exit_code
 
-      - name: Upload E2E Test Results
+      - name: Upload test results
         uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: e2e-test-results
+          name: test-results-${{ matrix.test_id }}
           path: test-results
 
   coverage:
@@ -372,11 +233,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs:
-      - test-domain
-      - test-unit
-      - test-architecture
-      - test-component
-      - test-e2e
+      - test
     if: always()
 
     steps:
@@ -442,11 +299,8 @@ jobs:
     timeout-minutes: 10
     needs:
       - build
-      - test-domain
-      - test-unit
-      - test-architecture
-      - test-component
-      - test-e2e
+      - discover-tests
+      - test
     if: always()
 
     steps:
@@ -475,29 +329,23 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Job Status" >> $GITHUB_STEP_SUMMARY
           echo "- **Build:** ${{ needs.build.result }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Domain.Tests:** ${{ needs.test-domain.result }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Unit.Tests:** ${{ needs.test-unit.result }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Architecture.Tests:** ${{ needs.test-architecture.result }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Component.Tests:** ${{ needs.test-component.result }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **E2E.Tests (Aspire + Playwright E2E):** ${{ needs.test-e2e.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Discovered Tests:** ${{ needs.discover-tests.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Test Matrix:** ${{ needs.test.result }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Artifacts" >> $GITHUB_STEP_SUMMARY
           echo "- Test results and coverage reports available in Actions artifacts" >> $GITHUB_STEP_SUMMARY
           echo "- Coverage report: \`coverage-reports\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Discovered Test Projects" >> $GITHUB_STEP_SUMMARY
+          echo '${{ needs.discover-tests.outputs.matrix }}' | jq -r '.include[].project_path | "- " + .' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
 
           # Set overall status
           build_status="${{ needs.build.result }}"
-          domain_status="${{ needs.test-domain.result }}"
-          unit_status="${{ needs.test-unit.result }}"
-          arch_status="${{ needs.test-architecture.result }}"
-          component_status="${{ needs.test-component.result }}"
+          discover_status="${{ needs.discover-tests.result }}"
+          test_status="${{ needs.test.result }}"
 
-          e2e_status="${{ needs.test-e2e.result }}"
-
-          if [[ "$build_status" == "failure" || "$domain_status" == "failure" || "$unit_status" == "failure" || \
-                "$arch_status" == "failure" || "$component_status" == "failure" || \
-                "$e2e_status" == "failure" ]]; then
+          if [[ "$build_status" == "failure" || "$discover_status" == "failure" || "$test_status" == "failure" ]]; then
             echo "❌ **Overall Status:** FAILED" >> $GITHUB_STEP_SUMMARY
           else
             echo "✅ **Overall Status:** PASSED" >> $GITHUB_STEP_SUMMARY
